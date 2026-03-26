@@ -1,0 +1,309 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pink-hot: #FF69B4;
+  --pink-deep: #FF1493;
+  --magenta: #FF00FF;
+  --baby-blue: #87CEEB;
+  --lavender: #E6E6FA;
+  --coral: #FF6F61;
+  --cream: #FFF5F5;
+  --dark: #1a1a2e;
+  --font: 'Outfit', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  overflow: hidden;
+  background: var(--dark);
+  color: white;
+  cursor: default;
+}
+
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+/* ── Loader ── */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b3d 50%, #1a1a2e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#loader.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+.loader-content {
+  text-align: center;
+}
+.loader-title {
+  font-size: 4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--pink-hot), var(--magenta), var(--baby-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+.loader-subtitle {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.6);
+  margin-top: 0.25rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.loader-bar {
+  width: 200px;
+  height: 3px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin: 2rem auto 0;
+  overflow: hidden;
+}
+.loader-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink-hot), var(--magenta));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.loader-hint {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+  margin-top: 1.5rem;
+  letter-spacing: 0.1em;
+}
+
+/* ── Title Bar ── */
+#title-bar {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+#title-bar.visible {
+  opacity: 1;
+}
+.title-name {
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+}
+.title-divider {
+  margin: 0 0.5rem;
+  opacity: 0.3;
+}
+
+/* ── Room Label ── */
+#room-label {
+  position: fixed;
+  z-index: 20;
+  padding: 0.4rem 1rem;
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,105,180,0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--pink-hot);
+  pointer-events: none;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.2s ease;
+}
+
+/* ── Back Button ── */
+#back-btn {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 20;
+  padding: 0.6rem 1.2rem;
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,105,180,0.3);
+  border-radius: 25px;
+  color: white;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-20px);
+}
+#back-btn:not(.hidden) {
+  opacity: 1;
+  transform: translateX(0);
+}
+#back-btn:hover {
+  background: rgba(255, 105, 180, 0.2);
+  border-color: var(--pink-hot);
+}
+.back-arrow {
+  margin-right: 0.3rem;
+}
+
+/* ── Object Tooltip ── */
+#object-tooltip {
+  position: fixed;
+  z-index: 20;
+  padding: 0.5rem 1rem;
+  background: rgba(26, 26, 46, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,105,180,0.4);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+  pointer-events: none;
+  transform: translate(-50%, -140%);
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+}
+#object-tooltip .tooltip-hint {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.15rem;
+}
+
+/* ── Project Overlay ── */
+#project-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(26, 26, 46, 0.0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.5s ease;
+  pointer-events: none;
+}
+#project-overlay:not(.hidden) {
+  background: rgba(26, 26, 46, 0.92);
+  pointer-events: all;
+}
+.project-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, #2d1b3d, #1a1a2e);
+  border: 1px solid rgba(255,105,180,0.2);
+  border-radius: 24px;
+  padding: 3rem;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#project-overlay:not(.hidden) .project-content {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+#project-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: var(--font);
+}
+#project-close:hover {
+  color: var(--pink-hot);
+}
+#project-inner h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--pink-hot), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+#project-inner .project-tag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255,105,180,0.15);
+  border: 1px solid rgba(255,105,180,0.3);
+  border-radius: 15px;
+  font-size: 0.75rem;
+  color: var(--pink-hot);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+#project-inner p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 1rem;
+}
+#project-inner .project-hero {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, rgba(255,105,180,0.2), rgba(135,206,235,0.2));
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.3);
+}
+#project-inner .project-credits {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+}
+#project-inner .project-credits strong {
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── Utilities ── */
+.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden;
+}
+
+/* ── Scrollbar ── */
+.project-content::-webkit-scrollbar {
+  width: 6px;
+}
+.project-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.project-content::-webkit-scrollbar-thumb {
+  background: rgba(255,105,180,0.3);
+  border-radius: 3px;
+}
+
+/* ── Cursor ── */
+body.pointer { cursor: pointer; }
