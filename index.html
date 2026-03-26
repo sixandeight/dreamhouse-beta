@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dreamhouse — Naomi & Jana</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/dreamhouse-beta/assets/index-CagQl5FG.js"></script>
+  <link rel="stylesheet" crossorigin href="/dreamhouse-beta/assets/index-DrkFNhVF.css">
+</head>
+<body>
+  <canvas id="dreamhouse-canvas"></canvas>
+
+  <!-- Loading screen -->
+  <div id="loader">
+    <div class="loader-content">
+      <h1 class="loader-title">Dreamhouse</h1>
+      <p class="loader-subtitle">Naomi & Jana</p>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+      <p class="loader-hint">click a room to explore</p>
+    </div>
+  </div>
+
+  <!-- Room label tooltip -->
+  <div id="room-label" class="hidden"></div>
+
+  <!-- Back button (visible when zoomed into a room) -->
+  <button id="back-btn" class="hidden">
+    <span class="back-arrow">&larr;</span> back to house
+  </button>
+
+  <!-- Object tooltip (visible when hovering objects in a room) -->
+  <div id="object-tooltip" class="hidden"></div>
+
+  <!-- Project overlay -->
+  <div id="project-overlay" class="hidden">
+    <div class="project-content">
+      <button id="project-close">&times;</button>
+      <div id="project-inner"></div>
+    </div>
+  </div>
+
+  <!-- Title bar -->
+  <div id="title-bar">
+    <span class="title-name">Dreamhouse</span>
+    <span class="title-divider">|</span>
+    <span class="title-credits">Naomi & Jana</span>
+  </div>
+
+</body>
+</html>
