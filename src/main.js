@@ -533,7 +533,11 @@ function zoomToHouse() {
   roomGroups.forEach((r) => {
     r.group.traverse((child) => {
       if (child.isMesh && child.material && child.material.transparent) {
-        gsap.to(child.material, { opacity: 1, duration: 0.8 });
+        gsap.to(child.material, {
+          opacity: 1,
+          duration: 0.8,
+          onComplete: () => { child.material.transparent = false; },
+        });
       }
     });
   });
@@ -543,6 +547,8 @@ function zoomToHouse() {
 function openProject(projectId) {
   const project = PROJECTS[projectId];
   if (!project) return;
+
+  currentView = 'project';
 
   let creditsHtml = '';
   if (project.credits) {
@@ -565,6 +571,7 @@ function openProject(projectId) {
 
 function closeProject() {
   projectOverlay.classList.add('hidden');
+  currentView = 'room';
 }
 
 // ── Animation loop ──
@@ -592,11 +599,15 @@ function animate() {
     sparkleParticles.material.opacity = 0.3 + Math.sin(t * 0.8) * 0.15;
   }
 
-  // Gentle camera sway in house view
+  // Camera behavior per view
   if (currentView === 'house' && !isAnimating) {
     camera.position.x = houseCamPos.x + Math.sin(t * 0.3) * 0.05;
     camera.position.y = houseCamPos.y + Math.sin(t * 0.2) * 0.03;
     camera.lookAt(houseCenter);
+  } else if ((currentView === 'room' || currentView === 'project') && activeRoom && !isAnimating) {
+    camera.position.x = activeRoom.camPos.x + Math.sin(t * 0.4) * 0.02;
+    camera.position.y = activeRoom.camPos.y + Math.sin(t * 0.25) * 0.015;
+    camera.lookAt(activeRoom.camTarget);
   }
 
   renderer.render(scene, camera);
@@ -649,9 +660,9 @@ function init() {
   // Keyboard
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (!projectOverlay.classList.contains('hidden')) {
+      if (currentView === 'project') {
         closeProject();
-      } else if (currentView === 'room') {
+      } else if (currentView === 'room' && !isAnimating) {
         zoomToHouse();
       }
     }

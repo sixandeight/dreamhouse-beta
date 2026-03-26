@@ -10,7 +10,7 @@
 
 ## 3. MeshToonMaterial Transparency
 **Problem**: When fading out rooms (zooming into one), toon materials don't support opacity by default.
-**Solution**: Set `transparent: true` on the material before tweening `opacity`. GSAP handles this via `onUpdate`.
+**Solution**: Set `transparent: true` on the material before tweening `opacity`. GSAP handles this via `onUpdate`. **Important**: When fading back in, reset `transparent = false` in the tween's `onComplete` — leaving it `true` permanently causes z-sorting artifacts.
 
 ## 4. Raycaster Hit on Furniture Groups
 **Problem**: Furniture is built as `THREE.Group` with many child meshes. Raycaster might hit a tiny sub-mesh (like a leg) instead of the main piece.
